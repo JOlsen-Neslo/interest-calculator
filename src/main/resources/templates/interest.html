@@ -1,0 +1,78 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <title>Interest Calculator</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+
+    <link href="../static/css/bootstrap.min.css" rel="stylesheet" th:href="@{/css/bootstrap.css}"/>
+</head>
+<body>
+<section class="container">
+    <nav class="navbar navbar-default">
+        <a class="navbar-brand"><b>Interest Calculator</b></a>
+    </nav>
+    <main class="container">
+        <div class="alert alert-success" th:if="${result != null and result == 1}">
+            Success! The interest calculated is: R <span th:text="${value}"></span>
+        </div>
+        <div class="alert alert-danger" th:if="${result != null and result == 0}">
+            Failed! <span th:text="${reason}"></span>
+        </div>
+        <form method="post" action="#" th:action="@{/agreements/interest/calculate}" th:object="${interestCriteria}">
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="amount">Enter the amount to calculate:</label>
+                        <input id="amount" class="form-control" type="number" th:field="*{amount}" step="0.01" min="0">
+                        <small style="color: orangered" th:if="${#fields.hasErrors('amount')}">Amount is invalid</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="type">Enter the agreement type:</label>
+                        <select id="type" class="form-control" th:if="${not types.isEmpty()}"
+                                th:field="*{agreementType}">
+                            <option disabled th:value="${null}">Select a type</option>
+                            <option th:each="type : ${types}" th:text="${type}" th:value="${type}"></option>
+                        </select>
+                        <small style="color: orangered" th:if="${#fields.hasErrors('agreementType')}">Agreement type is
+                            invalid</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="start">Start Date:</label>
+                        <input id="start" class="form-control" type="date" th:field="*{startDate}">
+                        <small style="color: orangered" th:if="${#fields.hasErrors('startDate')}">Start Date is
+                            invalid</small>
+                    </div>
+                </div>
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="end">End Date:</label>
+                        <input id="end" class="form-control" type="date" th:field="*{endDate}">
+                        <small style="color: orangered" th:if="${#fields.hasErrors('endDate')}">End Date is
+                            invalid</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-6">
+                    <div class="form-group">
+                        <label for="repo">Enter the Repo Rate:</label>
+                        <input id="repo" class="form-control" type="number" th:field="*{repoRate}" step=".01" min="0">
+                        <small style="color: orangered" th:if="${#fields.hasErrors('repoRate')}">Repo Rate is
+                            invalid</small>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <button type="submit" class="btn btn-primary">Calculate</button>
+            </div>
+        </form>
+    </main>
+</section>
+</body>
+</html>
